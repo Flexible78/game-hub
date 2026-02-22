@@ -1,6 +1,7 @@
 import { Badge, Card, HStack, Image, Text } from '@chakra-ui/react'
 import { type Game } from '@/models/fetch-types'
 
+
 type Props = {
     game: Game
 }
