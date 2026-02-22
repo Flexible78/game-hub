@@ -2,7 +2,6 @@ import { Grid, GridItem, Stack } from "@chakra-ui/react"
 import Nav from "./components/Nav"
 import GameGrid from "./components/GameGrid"
 
-
 function App() {
     return (
         <Grid templateAreas={
