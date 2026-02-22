@@ -4,8 +4,6 @@ import GameGrid from "./components/GameGrid"
 
 
 function App() {
-
-
     return (
         <Grid templateAreas={
             {
