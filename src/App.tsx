@@ -26,7 +26,7 @@ function App() {
                 base: '"nav" "main"',
                 md: '"nav nav" "aside main"'
             }}
-            templateColumns={{ base: "1fr", md: "320px 1fr" }}
+            templateColumns={{ base: "1fr", md: "280px 1fr" }}
             templateRows="auto 1fr"
             minH="100vh"
         >

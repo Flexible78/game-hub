@@ -7,6 +7,12 @@ type GenreFetchResponse = {
     results: Genre[]
 }
 
+const formatGenreName = (name: string) => {
+    const words = name.trim().split(/\s+/)
+    if (words.length < 2) return name
+    return `${words[0]}\n${words.slice(1).join(' ')}`
+}
+
 const GenreList = () => {
     const [genres, setGenres] = React.useState<Genre[]>([])
 
@@ -30,13 +36,15 @@ const GenreList = () => {
                                 fontWeight='medium'
                                 fontSize='sm'
                                 px='2'
-                                py='1'
+                                py='1.5'
                                 h='auto'
                                 flex='1'
                                 minW='0'
-                                whiteSpace='nowrap'
+                                whiteSpace='pre-line'
+                                lineHeight='1.2'
+                                textAlign='left'
                             >
-                                {genre.name}
+                                {formatGenreName(genre.name)}
                             </Button>
                         </HStack>
                     </List.Item>
