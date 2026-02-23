@@ -4,6 +4,7 @@ import useData from '@/services/hooks/useData'
 type UseGameResult = {
     data: Game[]
     isLoading: boolean
+    error: string | null
 }
 
 export default function useGame(): UseGameResult {
