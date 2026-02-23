@@ -2,6 +2,7 @@ import { Card, HStack, Image } from '@chakra-ui/react'
 import { type Game } from '@/models/fetch-types'
 import StarsRater from './StarsRater'
 import MetacriticBadge from './MetacriticBadge'
+import PlatformIconList from './PlatformIconList'
 
 
 type Props = {
@@ -16,6 +17,9 @@ const GameCard = ({ game }: Props) => {
                 <Card.Title>{game.name}</Card.Title>
                 <HStack justify='space-between'>
                     <MetacriticBadge metacritic={game.metacritic} />
+                    <PlatformIconList parentPlatforms={game.parent_platforms} />
+                </HStack>
+                <HStack justify='end'>
                     <StarsRater rating={game.rating} />
                 </HStack>
             </Card.Body>
