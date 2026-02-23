@@ -57,7 +57,7 @@ function App() {
                         w="14"
                         rounded="full"
                         bgGradient="linear(to-r, #eb3ca6, #7a4df3, #44a8ff)"
-                    />
+                    />   ASIDE
                     <Box
                         position="absolute"
                         top="14"

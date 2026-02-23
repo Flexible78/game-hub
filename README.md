@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Архитектура проекта: Game Hub 🎮
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+В данном документе описана техническая реализация и архитектурные решения ключевых компонентов приложения. Проект построен на базе React с использованием строгой типизации TypeScript и компонентной библиотеки Chakra UI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 1. Слой данных и сетевое взаимодействие (Data Layer)
 
-## React Compiler
+### 📄 `src/services/app-client.ts`
+Отвечает за конфигурацию HTTP-клиента для взаимодействия с внешним API RAWG.
+* **Изоляция настроек:** Создан отдельный экземпляр `axios.create(...)`, что позволяет централизованно управлять параметрами сети.
+* **Базовая маршрутизация:** Установлен `baseURL` (`https://api.rawg.io/api/`), избавляющий от необходимости дублировать полный URL в каждом компоненте.
+* **Авторизация запросов:** Реализован объект `params`, который автоматически инжектирует API-ключ `key` в строку запроса (Query String) каждого исходящего HTTP-вызова.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 📄 `src/models/fetch-types.ts`
+Обеспечивает строгую типизацию контрактов данных.
+* **Интерфейс `Game`:** Описывает структуру игровой сущности. Поля `background_image` и `metacritic` используют объединение с `null` (`string | null`, `number | null`), выступая "предохранителем" от падения UI при отсутствии данных на сервере.
+* **Интерфейс `FetchResponse`:** Описывает ожидаемую обертку ответа API, строго типизируя массив результатов как `Game[]`.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 2. Базовые UI Компоненты (Атомарный слой)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📄 `src/components/StarsRater.tsx`
+Компонент вычисляемого рендеринга для визуализации рейтинга, работающий как чистая функция.
+* **Алгоритм декомпозиции:** Дробное число (рейтинг) разделяется на целую (`Math.floor()`) и дробную часть для точного позиционирования иконок.
+* **Генерация узлов в памяти:** Метод `Array.from({ length: 5 })` создает итерируемый объект для строгого рендера пяти элементов.
+* **Логика распределения:** * Индексы меньше целой части возвращают залитую иконку `<FaStar />`.
+    * Пограничный индекс анализирует остаток: `< 0.25` (пустая), `<= 0.75` (половина `<FaStarHalfAlt />`), иначе — полная звезда.
+    * Оставшиеся индексы заполняются `<FaRegStar />`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 📄 `src/components/MetacriticBadge.tsx`
+Индикатор с интеллектуальным условным стайлингом.
+* **Защита типов:** Компонент готов к работе с отсутствующими данными благодаря типу `number | null`.
+* **Вычисляемый флаг:** Переменная `isHighScore` инкапсулирует логику оценки (строго `!== null` и `> 89`) для обеспечения чистоты JSX-кода.
+* **Тернарный рендеринг:** Используется внутри пропсов `Badge` для бесшовного переключения цветовых схем (зеленый для высоких оценок, светло-серый для остальных).
+* **Nullish Coalescing (`??`):** Применяется для вывода резервного текста `'N/A'`, срабатывая исключительно при строгом равенстве значения `null` или `undefined`.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 3. Композиционные Компоненты (Слой логики и разметки)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 📄 `src/components/GameCard.tsx`
+Демонстрирует принцип композиции и единой ответственности (SRP).
+* **Защита медиа-контента:** Оператор `?? undefined` в компоненте `Image` предотвращает передачу `null` в качестве источника картинки, защищая верстку от битых изображений.
+* **Адаптивные пропорции:** Использование `aspectRatio={16/9}` и `objectFit='cover'` обеспечивает идеальную геометрию карточки вне зависимости от исходного размера изображения с API.
+* **Делегирование:** Карточка не вычисляет данные, а лишь распределяет их через пропсы в дочерние компоненты `MetacriticBadge` и `StarsRater` с помощью контейнера `HStack`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 📄 `src/components/GameGrid.tsx`
+Смарт-компонент, отвечающий за выборку данных (Data Fetching) и формирование адаптивного макета.
+* **Жизненный цикл:** Хук `useEffect` с пустым массивом зависимостей `[]` гарантирует, что HTTP-запрос будет выполнен строго один раз при первичном монтировании компонента.
+* **Адаптивная сетка:** Контейнер `SimpleGrid` инкапсулирует CSS Media Queries, автоматически перестраивая макет: 1 колонка на смартфонах (`base`), 2 на планшетах (`sm`) и 3 на десктопах (`md`).
+* **Оптимизация рендеринга:** При итерации `.map()` каждой карточке передается уникальный идентификатор `key={game.id}`, необходимый React для эффективного сравнения виртуального DOM.
