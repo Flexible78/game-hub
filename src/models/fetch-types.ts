@@ -7,6 +7,13 @@ export type Platform = {
 export type ParentPlatform = {
     platform: Platform
 }
+export type Genre = {
+    id: number,
+    name: string,
+    slug: string,
+    games_count: number,
+    image_background: string
+}
 
 export type Game = {
     id: number,
