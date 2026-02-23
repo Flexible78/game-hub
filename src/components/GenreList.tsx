@@ -19,8 +19,8 @@ const GenreList = () => {
             <List.Root gap='2'>
                 {genres.map(genre => (
                     <List.Item key={genre.id} listStyleType='none'>
-                        <HStack w='full' minW='0' gap='3'>
-                            <Avatar.Root size='sm'>
+                        <HStack w='full' minW='0' gap='2'>
+                            <Avatar.Root size='xs'>
                                 <Avatar.Fallback name={genre.name} />
                                 <Avatar.Image src={genre.image_background ?? undefined} />
                             </Avatar.Root>
@@ -28,10 +28,13 @@ const GenreList = () => {
                                 variant='ghost'
                                 justifyContent='flex-start'
                                 fontWeight='medium'
+                                fontSize='sm'
+                                px='2'
+                                py='1'
+                                h='auto'
                                 flex='1'
                                 minW='0'
-                                overflow='hidden'
-                                textOverflow='ellipsis'
+                                whiteSpace='nowrap'
                             >
                                 {genre.name}
                             </Button>
