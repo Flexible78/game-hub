@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Heading, Text, VStack } from "@chakra-ui/react"
+import { Box, Grid, GridItem } from "@chakra-ui/react"
 import Nav from "./components/Nav"
 import GameGrid from "./components/GameGrid"
 import { useColorModeValue } from "./components/ui/color-mode"
@@ -15,8 +15,8 @@ function App() {
         "linear-gradient(180deg, #111a27 0%, #0d1522 100%)",
     )
     const asideBorder = useColorModeValue("#d8e2f2", "#2a3a4f")
-    const asideTitleColor = useColorModeValue("#2f3f58", "#d1dcf2")
-    const asideTextColor = useColorModeValue("#546783", "#91a6c7")
+    const asideDecorBg = useColorModeValue("rgba(255, 255, 255, 0.45)", "rgba(24, 33, 49, 0.35)")
+    const asideGlow = useColorModeValue("rgba(86, 129, 255, 0.22)", "rgba(118, 162, 255, 0.28)")
 
     return (
         <Grid
@@ -48,21 +48,36 @@ function App() {
                 borderRightWidth="1px"
                 borderRightColor={asideBorder}
             >
-                <VStack align="start" gap={4}>
+                <Box h="full" rounded="xl" borderWidth="1px" borderColor={asideBorder} bg={asideDecorBg} position="relative" overflow="hidden">
                     <Box
+                        position="absolute"
+                        top="6"
+                        left="6"
                         h="3"
                         w="14"
                         rounded="full"
                         bgGradient="linear(to-r, #eb3ca6, #7a4df3, #44a8ff)"
                     />
-                    <Heading size="md" color={asideTitleColor}>
-                        Aside
-                    </Heading>
-                    <Text fontSize="sm" color={asideTextColor} lineHeight="1.6">
-                        Выбрана спокойная палитра под логотип: холодная база и мягкий
-                        неоновый акцент.
-                    </Text>
-                </VStack>
+                    <Box
+                        position="absolute"
+                        top="14"
+                        left="6"
+                        h="2"
+                        w="10"
+                        rounded="full"
+                        bgGradient="linear(to-r, #44a8ff, #7a4df3)"
+                    />
+                    <Box
+                        position="absolute"
+                        bottom="-20"
+                        right="-24"
+                        h="56"
+                        w="56"
+                        rounded="full"
+                        bg={asideGlow}
+                        filter="blur(30px)"
+                    />
+                </Box>
             </GridItem>
             <GridItem area="main" p={4}>
                 <GameGrid />
