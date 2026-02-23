@@ -9,7 +9,7 @@ type Props = {
 const GameCard = ({ game }: Props) => {
     return (
         <Card.Root overflow='hidden' h='100%'>
-            <Image src={game.background_image ?? undefined} alt={game.name} h='180px' objectFit='cover' />
+            <Image src={game.background_image ?? undefined} alt={game.name} w='100%' aspectRatio={16 / 9} objectFit='cover' />
             <Card.Body gap='3'>
                 <Card.Title>{game.name}</Card.Title>
                 <HStack justify='space-between'>

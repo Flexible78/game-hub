@@ -5,7 +5,7 @@ import { ColorModeButton } from './ui/color-mode'
 
 const Nav: React.FC = () => {
   return (
-    <HStack justifyContent={"space-between"}>
+    <HStack justifyContent={"space-between"} px={4} py={2}>
             <Image src={logo} boxSize={"10"}/>
             <ColorModeButton/>
     </HStack>
