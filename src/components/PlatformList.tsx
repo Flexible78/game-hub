@@ -9,7 +9,7 @@ const PlatformList = ({ parentPlatforms }: Props) => {
     const platformNames = Array.from(new Set(parentPlatforms.map(({ platform }) => platform.name))).join(', ')
 
     return (
-        <Text fontSize='xs' color='gray.500' textAlign='right' maxW='250px' lineClamp={2}>
+        <Text fontSize='sm' color='gray.500' textAlign='right' maxW='250px' lineClamp={2}>
             {platformNames || 'Unknown platform'}
         </Text>
     )
