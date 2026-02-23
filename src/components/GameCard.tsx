@@ -1,5 +1,6 @@
-import { Badge, Card, HStack, Image, Text } from '@chakra-ui/react'
+import { Badge, Card, HStack, Image } from '@chakra-ui/react'
 import { type Game } from '@/models/fetch-types'
+import StarsRater from './StarsRater'
 
 
 type Props = {
@@ -16,7 +17,7 @@ const GameCard = ({ game }: Props) => {
                     <Badge colorPalette='green' variant='subtle'>
                         Metacritic: {game.metacritic ?? 'N/A'}
                     </Badge>
-                    <Text fontWeight='semibold'>Rate: {game.rating.toFixed(1)}</Text>
+                    <StarsRater rating={game.rating} />
                 </HStack>
             </Card.Body>
         </Card.Root>
