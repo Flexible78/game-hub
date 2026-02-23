@@ -6,6 +6,7 @@ import GenreList from "./components/GenreList"
 
 
 function App() {
+    const navHeight = "68px"
     const navBackground = useColorModeValue(
         "linear-gradient(90deg, #eef3fb 0%, #e8effa 60%, #ecebff 100%)",
         "linear-gradient(90deg, #1a2330 0%, #1a2230 60%, #211b31 100%)",
@@ -38,6 +39,7 @@ function App() {
                 borderBottomWidth="1px"
                 borderBottomColor={navBorder}
                 backdropFilter="blur(4px)"
+                minH={navHeight}
             >
                 <Nav />
             </GridItem>
@@ -45,6 +47,10 @@ function App() {
                 area="aside"
                 bg={asideBackground}
                 hideBelow="md"
+                position="sticky"
+                top={navHeight}
+                alignSelf="start"
+                h={`calc(100vh - ${navHeight})`}
                 p={5}
                 borderRightWidth="1px"
                 borderRightColor={asideBorder}
