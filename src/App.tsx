@@ -49,7 +49,17 @@ function App() {
                 borderRightWidth="1px"
                 borderRightColor={asideBorder}
             >
-                <Box h="full" rounded="xl" borderWidth="1px" borderColor={asideBorder} bg={asidePanelBg} p={4}>
+                <Box
+                    h="full"
+                    minH="0"
+                    display="flex"
+                    flexDirection="column"
+                    rounded="xl"
+                    borderWidth="1px"
+                    borderColor={asideBorder}
+                    bg={asidePanelBg}
+                    p={4}
+                >
                     <Heading size="md" color={asideTitleColor} mb={4}>
                         Genres
                     </Heading>

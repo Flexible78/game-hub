@@ -1,4 +1,4 @@
-import { Avatar, Button, HStack, List } from '@chakra-ui/react'
+import { Avatar, Box, Button, HStack, List } from '@chakra-ui/react'
 import React from 'react'
 import { type Genre } from '@/models/fetch-types'
 import apiClient from '@/services/app-client'
@@ -15,21 +15,23 @@ const GenreList = () => {
     }, [])
 
     return (
-        <List.Root gap='2'>
-            {genres.map(genre => (
-                <List.Item key={genre.id} listStyleType='none'>
-                    <HStack w='full' gap='3'>
-                        <Avatar.Root size='sm'>
-                            <Avatar.Fallback name={genre.name} />
-                            <Avatar.Image src={genre.image_background ?? undefined} />
-                        </Avatar.Root>
-                        <Button variant='ghost' justifyContent='flex-start' fontWeight='medium' w='full'>
-                            {genre.name}
-                        </Button>
-                    </HStack>
-                </List.Item>
-            ))}
-        </List.Root>
+        <Box flex='1' minH='0' overflowY='auto' pe='1'>
+            <List.Root gap='2'>
+                {genres.map(genre => (
+                    <List.Item key={genre.id} listStyleType='none'>
+                        <HStack w='full' gap='3'>
+                            <Avatar.Root size='sm'>
+                                <Avatar.Fallback name={genre.name} />
+                                <Avatar.Image src={genre.image_background ?? undefined} />
+                            </Avatar.Root>
+                            <Button variant='ghost' justifyContent='flex-start' fontWeight='medium' w='full'>
+                                {genre.name}
+                            </Button>
+                        </HStack>
+                    </List.Item>
+                ))}
+            </List.Root>
+        </Box>
     )
 }
 
