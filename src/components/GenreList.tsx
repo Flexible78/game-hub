@@ -15,16 +15,24 @@ const GenreList = () => {
     }, [])
 
     return (
-        <Box flex='1' minH='0' overflowY='auto' pe='1'>
+        <Box flex='1' minH='0' overflowY='auto' overflowX='hidden' pe='1'>
             <List.Root gap='2'>
                 {genres.map(genre => (
                     <List.Item key={genre.id} listStyleType='none'>
-                        <HStack w='full' gap='3'>
+                        <HStack w='full' minW='0' gap='3'>
                             <Avatar.Root size='sm'>
                                 <Avatar.Fallback name={genre.name} />
                                 <Avatar.Image src={genre.image_background ?? undefined} />
                             </Avatar.Root>
-                            <Button variant='ghost' justifyContent='flex-start' fontWeight='medium' w='full'>
+                            <Button
+                                variant='ghost'
+                                justifyContent='flex-start'
+                                fontWeight='medium'
+                                flex='1'
+                                minW='0'
+                                overflow='hidden'
+                                textOverflow='ellipsis'
+                            >
                                 {genre.name}
                             </Button>
                         </HStack>
