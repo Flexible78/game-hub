@@ -1,11 +1,5 @@
-import { Avatar, Box, Button, HStack, List } from '@chakra-ui/react'
-import React from 'react'
-import { type Genre } from '@/models/fetch-types'
-import apiClient from '@/services/app-client'
-
-type GenreFetchResponse = {
-    results: Genre[]
-}
+import { Avatar, Box, Button, Center, HStack, List, Spinner } from '@chakra-ui/react'
+import useGenre from '@/services/hooks/useGenre'
 
 const formatGenreName = (name: string) => {
     const words = name.trim().split(/\s+/)
@@ -14,11 +8,15 @@ const formatGenreName = (name: string) => {
 }
 
 const GenreList = () => {
-    const [genres, setGenres] = React.useState<Genre[]>([])
+    const { data: genres, isLoading } = useGenre()
 
-    React.useEffect(() => {
-        apiClient.get<GenreFetchResponse>('genres').then(res => setGenres(res.data.results))
-    }, [])
+    if (isLoading) {
+        return (
+            <Center flex='1' minH='0'>
+                <Spinner size='md' />
+            </Center>
+        )
+    }
 
     return (
         <Box flex='1' minH='0' overflowY='auto' overflowX='hidden' pe='0.5'>
