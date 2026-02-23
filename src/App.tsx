@@ -64,7 +64,9 @@ function App() {
                     borderWidth="1px"
                     borderColor={asideBorder}
                     bg={asidePanelBg}
-                    p={4}
+                    ps={4}
+                    pe={2}
+                    py={4}
                 >
                     <Heading size="md" color={asideTitleColor} mb={4}>
                         Genres

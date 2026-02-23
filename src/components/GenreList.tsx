@@ -21,7 +21,7 @@ const GenreList = () => {
     }, [])
 
     return (
-        <Box flex='1' minH='0' overflowY='auto' overflowX='hidden' pe='1'>
+        <Box flex='1' minH='0' overflowY='auto' overflowX='hidden' pe='0.5'>
             <List.Root gap='2'>
                 {genres.map(genre => (
                     <List.Item key={genre.id} listStyleType='none'>
