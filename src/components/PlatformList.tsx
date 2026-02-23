@@ -5,7 +5,7 @@ type Props = {
     parentPlatforms: ParentPlatform[]
 }
 
-const PlatformIconList = ({ parentPlatforms }: Props) => {
+const PlatformList = ({ parentPlatforms }: Props) => {
     const platformNames = Array.from(new Set(parentPlatforms.map(({ platform }) => platform.name))).join(', ')
 
     return (
@@ -15,4 +15,4 @@ const PlatformIconList = ({ parentPlatforms }: Props) => {
     )
 }
 
-export default PlatformIconList
+export default PlatformList
