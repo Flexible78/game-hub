@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Center, HStack, List, Spinner } from '@chakra-ui/react'
+import { Avatar, Box, Button, Center, HStack, List, Spinner, Text } from '@chakra-ui/react'
 import useGenre from '@/services/hooks/useGenre'
 
 type Props = {
@@ -13,13 +13,21 @@ const formatGenreName = (name: string) => {
 }
 
 const GenreList = ({ selectedGenre, onGenreSelect }: Props) => {
-    const { data: genres, isLoading } = useGenre()
+    const { data: genres, isLoading, error } = useGenre()
 
     if (isLoading) {
         return (
             <Center flex='1' minH='0'>
                 <Spinner size='md' />
             </Center>
+        )
+    }
+
+    if (error) {
+        return (
+            <Text color='red.500' fontSize='sm' fontWeight='semibold'>
+                {error}
+            </Text>
         )
     }
 

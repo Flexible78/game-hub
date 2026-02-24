@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import apiClient from '@/services/app-client'
+import { AxiosError } from 'axios'
 
 type ApiResponse<T> = {
     results: T[]
@@ -29,7 +30,12 @@ export default function useData<T>(endpoint: string, genre: string | null = null
             })
             .catch(err => {
                 if (isCancelled) return
-                setError(err instanceof Error ? err.message : 'Failed to load data')
+                setData([])
+                setError(
+                    err instanceof AxiosError
+                        ? err.message
+                        : 'Failed to load data',
+                )
             })
             .finally(() => {
                 if (isCancelled) return
