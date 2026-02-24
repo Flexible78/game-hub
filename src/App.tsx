@@ -7,6 +7,7 @@ import { useState } from "react"
 import type { GameQueryParams } from "./models/GameQueryParams"
 import PlatformSelector from "./components/PlatformSelector"
 import GenreSelector from "./components/GenreSelector"
+import SortSelector from "./components/SortSelector"
 
 
 function App() {
@@ -104,6 +105,10 @@ function App() {
                     <PlatformSelector
                         parentPlatformSlug={gameQuery.parentPlatformSlug}
                         onPlatformSelect={(platform: string | null) => setGameQuery(prev => ({ ...prev, parentPlatformSlug: platform }))}
+                    />
+                    <SortSelector
+                        ordering={gameQuery.orderings}
+                        onOrderingSelect={(ordering: string | null) => setGameQuery(prev => ({ ...prev, orderings: ordering }))}
                     />
                 </HStack>
                 <GameGrid gameQuery={gameQuery} />
