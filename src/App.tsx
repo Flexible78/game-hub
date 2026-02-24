@@ -4,10 +4,17 @@ import GameGrid from "./components/GameGrid"
 import { useColorModeValue } from "./components/ui/color-mode"
 import GenreList from "./components/GenreList"
 import { useState } from "react"
+import type { GameQueryParams } from "./models/GameQueryParams"
+import PlatformSelector from "./components/PlatformSelector"
 
 
 function App() {
-    const [genre, setGenre] = useState<string | null>(null)
+    const [gameQuery, setGameQuery] = useState<GameQueryParams>({
+        genreSlug: null,
+        parentPlatformSlug: null,
+        searchStr: null,
+        orderings: null,
+    })
     const navHeight = "68px"
     const navBackground = useColorModeValue(
         "linear-gradient(90deg, #eef3fb 0%, #e8effa 60%, #ecebff 100%)",
@@ -28,7 +35,7 @@ function App() {
                 base: '"nav" "main"',
                 md: '"nav nav" "aside main"'
             }}
-            templateColumns={{ base: "1fr", md: "220px 1fr" }}
+            templateColumns={{ base: "1fr", md: "280px 1fr" }}
             templateRows="auto 1fr"
             minH="100vh"
         >
@@ -67,17 +74,32 @@ function App() {
                     borderColor={asideBorder}
                     bg={asidePanelBg}
                     ps={4}
-                    pe={2}
+                    pe={1}
                     py={4}
                 >
-                    <Heading size="md" color={asideTitleColor} mb={4}>
-                        Genres
+                    <Heading
+                        as="button"
+                        size="md"
+                        color={asideTitleColor}
+                        mb={4}
+                        textAlign="left"
+                        cursor="pointer"
+                        onClick={() => setGameQuery(prev => ({ ...prev, genreSlug: null }))}
+                    >
+                        All genres
                     </Heading>
-                    <GenreList genre={genre} onGenreSelect={setGenre} />
+                    <GenreList
+                        genre={gameQuery.genreSlug}
+                        onGenreSelect={(genre: string | null) => setGameQuery(prev => ({ ...prev, genreSlug: genre }))}
+                    />
                 </Box>
             </GridItem>
             <GridItem area="main" p={4}>
-                <GameGrid selectedGenre={genre} />
+                <PlatformSelector
+                    parentPlatformSlug={gameQuery.parentPlatformSlug}
+                    onPlatformSelect={(platform: string | null) => setGameQuery(prev => ({ ...prev, parentPlatformSlug: platform }))}
+                ></PlatformSelector>
+                <GameGrid gameQuery={gameQuery} />
             </GridItem>
 
         </Grid>

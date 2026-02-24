@@ -7,7 +7,14 @@ export default function useGame(
 ): { data: Game[]; isLoading: boolean; error: string } {
     return useData<Game>(
         "games",
-        { params: { genres: gameQuery.genreSlug } },
-        [gameQuery.genreSlug]
+        {
+            params: {
+                genres: gameQuery.genreSlug ?? undefined,
+                parent_platforms: gameQuery.parentPlatformSlug ?? undefined,
+                search: gameQuery.searchStr ?? undefined,
+                ordering: gameQuery.orderings ?? undefined
+            }
+        },
+        [gameQuery.genreSlug, gameQuery.parentPlatformSlug, gameQuery.searchStr, gameQuery.orderings]
     );
 }

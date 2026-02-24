@@ -1,18 +1,14 @@
 import { Center, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
 import useGame from '@/services/hooks/useGame'
+import type { GameQueryParams } from '@/models/GameQueryParams'
 import GameCard from './GameCard'
 
 type Props = {
-    selectedGenre: string | null
+    gameQuery: GameQueryParams
 }
 
-const GameGrid = ({ selectedGenre }: Props) => {
-    const { data: games, isLoading, error } = useGame({
-        genreSlug: selectedGenre,
-        parentPlatformSlug: null,
-        searchStr: null,
-        orderings: null,
-    })
+const GameGrid = ({ gameQuery }: Props) => {
+    const { data: games, isLoading, error } = useGame(gameQuery)
 
     if (isLoading) {
         return (
