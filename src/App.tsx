@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Heading } from "@chakra-ui/react"
+import { Box, Grid, GridItem, Heading, HStack } from "@chakra-ui/react"
 import Nav from "./components/Nav"
 import GameGrid from "./components/GameGrid"
 import { useColorModeValue } from "./components/ui/color-mode"
@@ -6,6 +6,7 @@ import GenreList from "./components/GenreList"
 import { useState } from "react"
 import type { GameQueryParams } from "./models/GameQueryParams"
 import PlatformSelector from "./components/PlatformSelector"
+import GenreSelector from "./components/GenreSelector"
 
 
 function App() {
@@ -95,10 +96,16 @@ function App() {
                 </Box>
             </GridItem>
             <GridItem area="main" p={4}>
-                <PlatformSelector
-                    parentPlatformSlug={gameQuery.parentPlatformSlug}
-                    onPlatformSelect={(platform: string | null) => setGameQuery(prev => ({ ...prev, parentPlatformSlug: platform }))}
-                ></PlatformSelector>
+                <HStack gap={3} wrap="wrap" mb={1}>
+                    <GenreSelector
+                        genreSlug={gameQuery.genreSlug}
+                        onGenreSelect={(genre: string | null) => setGameQuery(prev => ({ ...prev, genreSlug: genre }))}
+                    />
+                    <PlatformSelector
+                        parentPlatformSlug={gameQuery.parentPlatformSlug}
+                        onPlatformSelect={(platform: string | null) => setGameQuery(prev => ({ ...prev, parentPlatformSlug: platform }))}
+                    />
+                </HStack>
                 <GameGrid gameQuery={gameQuery} />
             </GridItem>
 
