@@ -7,7 +7,12 @@ type Props = {
 }
 
 const GameGrid = ({ selectedGenre }: Props) => {
-    const { data: games, isLoading, error } = useGame(selectedGenre)
+    const { data: games, isLoading, error } = useGame({
+        genreSlug: selectedGenre,
+        parentPlatformSlug: null,
+        searchStr: null,
+        orderings: null,
+    })
 
     if (isLoading) {
         return (

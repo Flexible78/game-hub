@@ -24,6 +24,6 @@ export type Game = {
     parent_platforms: ParentPlatform[]
 }
 
-export type FetchResponse = {
-    results: Game[]
+export type FetchResponse<T> = {
+    results: T[]
 }

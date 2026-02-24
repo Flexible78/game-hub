@@ -73,7 +73,7 @@ function App() {
                     <Heading size="md" color={asideTitleColor} mb={4}>
                         Genres
                     </Heading>
-                    <GenreList selectedGenre={genre} onGenreSelect={setGenre} />
+                    <GenreList genre={genre} onGenreSelect={setGenre} />
                 </Box>
             </GridItem>
             <GridItem area="main" p={4}>

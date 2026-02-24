@@ -1,41 +1,38 @@
 import { useEffect, useState } from 'react'
+import type { FetchResponse } from '@/models/fetch-types'
 import apiClient from '@/services/app-client'
-import { AxiosError } from 'axios'
-
-type ApiResponse<T> = {
-    results: T[]
-}
+import { AxiosError, type AxiosRequestConfig } from 'axios'
 
 type UseDataResult<T> = {
     data: T[]
     isLoading: boolean
-    error: string | null
+    error: string
 }
 
-export default function useData<T>(endpoint: string, genre: string | null = null): UseDataResult<T> {
+export default function useData<T>(
+    endpoint: string,
+    config?: AxiosRequestConfig,
+    deps: readonly unknown[] = [],
+): UseDataResult<T> {
     const [data, setData] = useState<T[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('')
 
     useEffect(() => {
         let isCancelled = false
         setIsLoading(true)
-        setError(null)
+        setError('')
 
         apiClient
-            .get<ApiResponse<T>>(endpoint, { params: genre ? { genres: genre } : undefined })
+            .get<FetchResponse<T>>(endpoint, config)
             .then(res => {
                 if (isCancelled) return
                 setData(res.data.results)
             })
-            .catch(err => {
+            .catch((e: unknown) => {
                 if (isCancelled) return
                 setData([])
-                setError(
-                    err instanceof AxiosError
-                        ? err.message
-                        : 'Failed to load data',
-                )
+                setError(e instanceof AxiosError ? e.message : 'Failed to load data')
             })
             .finally(() => {
                 if (isCancelled) return
@@ -45,7 +42,7 @@ export default function useData<T>(endpoint: string, genre: string | null = null
         return () => {
             isCancelled = true
         }
-    }, [endpoint, genre])
+    }, [endpoint, ...deps])
 
     return { data, isLoading, error }
 }

@@ -1,69 +1,64 @@
-import { Avatar, Box, Button, Center, HStack, List, Spinner, Text } from '@chakra-ui/react'
-import useGenre from '@/services/hooks/useGenre'
+import useGenre from "@/services/hooks/useGenre";
+import { Avatar, Button, HStack, List, Spinner, Text } from "@chakra-ui/react";
+import { FC, useMemo } from "react";
 
 type Props = {
-    selectedGenre: string | null
-    onGenreSelect: (genreSlug: string) => void
+    onGenreSelect: (genre: string | null) => void
+    genre: string | null
 }
 
-const formatGenreName = (name: string) => {
-    const words = name.trim().split(/\s+/)
-    if (words.length < 2) return name
-    return `${words[0]}\n${words.slice(1).join(' ')}`
-}
+const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
+    const { data: genres, isLoading } = useGenre();
 
-const GenreList = ({ selectedGenre, onGenreSelect }: Props) => {
-    const { data: genres, isLoading, error } = useGenre()
-
-    if (isLoading) {
-        return (
-            <Center flex='1' minH='0'>
-                <Spinner size='md' />
-            </Center>
-        )
-    }
-
-    if (error) {
-        return (
-            <Text color='red.500' fontSize='sm' fontWeight='semibold'>
-                {error}
-            </Text>
-        )
-    }
+    const genresWithAll = useMemo(() => (
+        [
+            {
+                id: -1,
+                name: "All genres",
+                slug: "",
+                games_count: 0,
+                image_background: ""
+            },
+            ...genres
+        ]
+    ), [genres]);
 
     return (
-        <Box flex='1' minH='0' overflowY='auto' overflowX='hidden' pe='0.5'>
-            <List.Root gap='2'>
-                {genres.map(genre => (
-                    <List.Item key={genre.id} listStyleType='none'>
-                        <HStack w='full' minW='0' gap='2'>
-                            <Avatar.Root size='xs'>
-                                <Avatar.Fallback name={genre.name} />
-                                <Avatar.Image src={genre.image_background ?? undefined} />
+        <>
+            {isLoading && <Spinner></Spinner>}
+            <List.Root listStyle="none" maxHeight="85vh" overflow="auto" width="15vw">
+                {genresWithAll.map((g) => (
+                    <List.Item key={g.id}>
+                        <HStack padding={2}>
+                            <Avatar.Root shape="rounded" size="lg">
+                                <Avatar.Fallback name={g.name} />
+                                <Avatar.Image src={g.image_background} />
                             </Avatar.Root>
                             <Button
-                                variant='ghost'
-                                justifyContent='flex-start'
-                                fontWeight={selectedGenre === genre.slug ? 'bold' : 'medium'}
-                                fontSize='sm'
-                                px='2'
-                                py='1.5'
-                                h='auto'
-                                flex='1'
-                                minW='0'
-                                whiteSpace='pre-line'
-                                lineHeight='1.2'
-                                textAlign='left'
-                                onClick={() => onGenreSelect(genre.slug)}
+                                variant={"outline"}
+                                borderWidth="0"
+                                fontSize={"1.1rem"}
+                                paddingX="1"
+                                height="auto"
+                                whiteSpace="normal"
+                                textAlign="left"
+                                onClick={() => onGenreSelect(g.id === -1 ? null : g.slug)}
                             >
-                                {formatGenreName(genre.name)}
+                                <Text
+                                    maxW="10vw"
+                                    lineHeight="1.2"
+                                    fontWeight={(g.id === -1 ? genre === null : g.slug === genre) ? "bold" : "normal"}
+                                >
+                                    {g.name}
+                                </Text>
                             </Button>
                         </HStack>
                     </List.Item>
                 ))}
             </List.Root>
-        </Box>
+            ;
+        </>
     )
-}
+};
 
-export default GenreList
+export default GenreList;
