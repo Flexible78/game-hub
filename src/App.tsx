@@ -3,9 +3,11 @@ import Nav from "./components/Nav"
 import GameGrid from "./components/GameGrid"
 import { useColorModeValue } from "./components/ui/color-mode"
 import GenreList from "./components/GenreList"
+import { useState } from "react"
 
 
 function App() {
+    const [genre, setGenre] = useState<string | null>(null)
     const navHeight = "68px"
     const navBackground = useColorModeValue(
         "linear-gradient(90deg, #eef3fb 0%, #e8effa 60%, #ecebff 100%)",
@@ -71,11 +73,11 @@ function App() {
                     <Heading size="md" color={asideTitleColor} mb={4}>
                         Genres
                     </Heading>
-                    <GenreList />
+                    <GenreList selectedGenre={genre} onGenreSelect={setGenre} />
                 </Box>
             </GridItem>
             <GridItem area="main" p={4}>
-                <GameGrid />
+                <GameGrid selectedGenre={genre} />
             </GridItem>
 
         </Grid>

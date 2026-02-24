@@ -1,13 +1,18 @@
 import { Avatar, Box, Button, Center, HStack, List, Spinner } from '@chakra-ui/react'
 import useGenre from '@/services/hooks/useGenre'
 
+type Props = {
+    selectedGenre: string | null
+    onGenreSelect: (genreSlug: string) => void
+}
+
 const formatGenreName = (name: string) => {
     const words = name.trim().split(/\s+/)
     if (words.length < 2) return name
     return `${words[0]}\n${words.slice(1).join(' ')}`
 }
 
-const GenreList = () => {
+const GenreList = ({ selectedGenre, onGenreSelect }: Props) => {
     const { data: genres, isLoading } = useGenre()
 
     if (isLoading) {
@@ -31,7 +36,7 @@ const GenreList = () => {
                             <Button
                                 variant='ghost'
                                 justifyContent='flex-start'
-                                fontWeight='medium'
+                                fontWeight={selectedGenre === genre.slug ? 'bold' : 'medium'}
                                 fontSize='sm'
                                 px='2'
                                 py='1.5'
@@ -41,6 +46,7 @@ const GenreList = () => {
                                 whiteSpace='pre-line'
                                 lineHeight='1.2'
                                 textAlign='left'
+                                onClick={() => onGenreSelect(genre.slug)}
                             >
                                 {formatGenreName(genre.name)}
                             </Button>

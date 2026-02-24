@@ -7,6 +7,6 @@ type UseGameResult = {
     error: string | null
 }
 
-export default function useGame(): UseGameResult {
-    return useData<Game>('games')
+export default function useGame(genre: string | null): UseGameResult {
+    return useData<Game>('games', genre)
 }

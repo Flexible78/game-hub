@@ -11,7 +11,7 @@ type UseDataResult<T> = {
     error: string | null
 }
 
-export default function useData<T>(endpoint: string): UseDataResult<T> {
+export default function useData<T>(endpoint: string, genre: string | null = null): UseDataResult<T> {
     const [data, setData] = useState<T[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -22,7 +22,7 @@ export default function useData<T>(endpoint: string): UseDataResult<T> {
         setError(null)
 
         apiClient
-            .get<ApiResponse<T>>(endpoint)
+            .get<ApiResponse<T>>(endpoint, { params: genre ? { genres: genre } : undefined })
             .then(res => {
                 if (isCancelled) return
                 setData(res.data.results)
@@ -39,7 +39,7 @@ export default function useData<T>(endpoint: string): UseDataResult<T> {
         return () => {
             isCancelled = true
         }
-    }, [endpoint])
+    }, [endpoint, genre])
 
     return { data, isLoading, error }
 }
