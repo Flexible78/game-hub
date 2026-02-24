@@ -98,10 +98,12 @@ function App() {
             </GridItem>
             <GridItem area="main" p={4}>
                 <HStack gap={3} wrap="wrap" mb={1}>
-                    <GenreSelector
-                        genreSlug={gameQuery.genreSlug}
-                        onGenreSelect={(genre: string | null) => setGameQuery(prev => ({ ...prev, genreSlug: genre }))}
-                    />
+                    <Box display={{ base: "block", md: "none" }}>
+                        <GenreSelector
+                            genreSlug={gameQuery.genreSlug}
+                            onGenreSelect={(genre: string | null) => setGameQuery(prev => ({ ...prev, genreSlug: genre }))}
+                        />
+                    </Box>
                     <PlatformSelector
                         parentPlatformSlug={gameQuery.parentPlatformSlug}
                         onPlatformSelect={(platform: string | null) => setGameQuery(prev => ({ ...prev, parentPlatformSlug: platform }))}
