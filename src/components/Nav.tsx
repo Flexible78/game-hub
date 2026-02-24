@@ -3,21 +3,33 @@ import logo from "/image.png"
 import React from 'react'
 import { ColorModeButton, useColorModeValue } from './ui/color-mode'
 
-const Nav: React.FC = () => {
-  const logoContainerBg = useColorModeValue('rgba(255, 255, 255, 0.72)', 'rgba(12, 17, 27, 0.55)')
-  const logoBorder = useColorModeValue('#d6e2f6', '#2e3b50')
+type Props = {
+  onLogoClick: () => void
+}
+
+const Nav: React.FC<Props> = ({ onLogoClick }) => {
   const buttonColor = useColorModeValue('#596f90', '#a9bddc')
+  const logoFilter = useColorModeValue(
+    'drop-shadow(0 2px 8px rgba(65, 91, 128, 0.28))',
+    'drop-shadow(0 2px 8px rgba(103, 131, 176, 0.28))',
+  )
 
   return (
-    <HStack justifyContent={"space-between"} px={5} py={3}>
+    <HStack justifyContent={"space-between"} px={4} py={1}>
             <Box
-              p={1.5}
-              rounded="lg"
-              bg={logoContainerBg}
-              borderWidth="1px"
-              borderColor={logoBorder}
+              as="button"
+              p={0}
+              bg="transparent"
+              borderWidth="0"
+              lineHeight="0"
+              cursor="pointer"
+              transition="opacity 0.2s ease, filter 0.2s ease"
+              _hover={{ opacity: 0.82, filter: 'brightness(0.88)' }}
+              _focusVisible={{ outline: '2px solid', outlineColor: buttonColor, outlineOffset: '2px' }}
+              aria-label="Reset all filters"
+              onClick={onLogoClick}
             >
-              <Image src={logo} boxSize={"8"} />
+              <Image src={logo} boxSize={{ base: "7", md: "8" }} filter={logoFilter} />
             </Box>
             <ColorModeButton color={buttonColor} />
     </HStack>

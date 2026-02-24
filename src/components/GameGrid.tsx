@@ -2,6 +2,7 @@ import { Center, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
 import useGame from '@/services/hooks/useGame'
 import type { GameQueryParams } from '@/models/GameQueryParams'
 import GameCard from './GameCard'
+import { useColorModeValue } from './ui/color-mode'
 
 type Props = {
     gameQuery: GameQueryParams
@@ -9,6 +10,8 @@ type Props = {
 
 const GameGrid = ({ gameQuery }: Props) => {
     const { data: games, isLoading, error } = useGame(gameQuery)
+    const scrollbarThumb = useColorModeValue("rgba(91, 113, 146, 0.55)", "rgba(73, 93, 121, 0.78)")
+    const scrollbarTrack = useColorModeValue("rgba(219, 228, 241, 0.42)", "rgba(18, 29, 44, 0.76)")
 
     if (isLoading) {
         return (
@@ -28,12 +31,27 @@ const GameGrid = ({ gameQuery }: Props) => {
 
     return (
         <SimpleGrid
-            columns={{ base: 1, sm: 2, md: 3 }}
-            columnGap={5}
-            rowGap={12}
+            columns={{ base: 1, sm: 1, md: 2, "2xl": 3 }}
+            columnGap={{ base: 3, md: 4, "2xl": 5 }}
+            rowGap={{ base: 6, md: 8, "2xl": 10 }}
             maxH='80vh'
             overflow='auto'
-            p={{ base: 4, sm: 1, md: 5 }}
+            p={{ base: 2, sm: 2, md: 3, "2xl": 4 }}
+            css={{
+                scrollbarWidth: "thin",
+                scrollbarColor: `${scrollbarThumb} ${scrollbarTrack}`,
+                "&::-webkit-scrollbar": {
+                    width: "5px",
+                    height: "5px",
+                },
+                "&::-webkit-scrollbar-track": {
+                    background: scrollbarTrack,
+                },
+                "&::-webkit-scrollbar-thumb": {
+                    background: scrollbarThumb,
+                    borderRadius: "9999px",
+                },
+            }}
         >
             {games.map(game => <GameCard key={game.id} game={game} />)}
         </SimpleGrid>

@@ -12,7 +12,7 @@ const StarsRater = ({ rating }: Props) => {
     const fractionPart = rating - integerPart
 
     return (
-        <HStack gap='1' color='yellow.400'>
+        <HStack gap='1' color='yellow.400' fontSize={{ base: '1.05rem', md: '1.15rem' }}>
             {Array.from({ length: starsCount }, (_, index) => {
                 if (index < integerPart) return <FaStar key={index} />
 

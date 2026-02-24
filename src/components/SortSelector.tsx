@@ -1,6 +1,7 @@
 import { Button, Menu, Portal } from '@chakra-ui/react'
 import { useMemo, useState, type FC } from 'react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { useColorModeValue } from './ui/color-mode'
 
 type Props = {
     ordering: string | null
@@ -25,6 +26,7 @@ const sortOptions: SortOption[] = [
 
 const SortSelector: FC<Props> = ({ ordering, onOrderingSelect }) => {
     const [isOpen, setIsOpen] = useState(false)
+    const filterTextColor = useColorModeValue('#2a3f60', '#b2bfd3')
 
     const buttonLabel = useMemo(() => {
         const selectedOption = sortOptions.find(option => option.value === ordering)
@@ -34,7 +36,7 @@ const SortSelector: FC<Props> = ({ ordering, onOrderingSelect }) => {
     return (
         <Menu.Root open={isOpen} onOpenChange={(details) => setIsOpen(details.open)}>
             <Menu.Trigger asChild>
-                <Button variant='outline' mb={4}>
+                <Button variant='outline' mb={4} color={filterTextColor}>
                     {buttonLabel}
                     {isOpen ? <FaChevronUp /> : <FaChevronDown />}
                 </Button>

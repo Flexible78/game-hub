@@ -1,6 +1,7 @@
 import useGenre from "@/services/hooks/useGenre";
 import { Avatar, Button, HStack, List, Spinner, Text } from "@chakra-ui/react";
 import { FC } from "react";
+import { useColorModeValue } from "./ui/color-mode";
 
 type Props = {
     onGenreSelect: (genre: string | null) => void
@@ -9,6 +10,9 @@ type Props = {
 
 const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
     const { data: genres, isLoading } = useGenre();
+    const filterTextColor = useColorModeValue("#2a3f60", "#b2bfd3")
+    const scrollbarThumb = useColorModeValue("rgba(91, 113, 146, 0.55)", "rgba(73, 93, 121, 0.78)")
+    const scrollbarTrack = useColorModeValue("rgba(219, 228, 241, 0.42)", "rgba(18, 29, 44, 0.76)")
 
     return (
         <>
@@ -24,15 +28,16 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
                 pe={0}
                 css={{
                     scrollbarWidth: "thin",
+                    scrollbarColor: `${scrollbarThumb} ${scrollbarTrack}`,
                     "&::-webkit-scrollbar": {
-                        width: "6px",
-                        height: "6px",
+                        width: "5px",
+                        height: "5px",
                     },
                     "&::-webkit-scrollbar-track": {
-                        background: "transparent",
+                        background: scrollbarTrack,
                     },
                     "&::-webkit-scrollbar-thumb": {
-                        background: "rgba(148, 163, 184, 0.55)",
+                        background: scrollbarThumb,
                         borderRadius: "9999px",
                     },
                 }}
@@ -65,6 +70,7 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
                                     overflowWrap="normal"
                                     lineHeight="1.2"
                                     textAlign="left"
+                                    color={filterTextColor}
                                     fontWeight={g.slug === genre ? "bold" : "normal"}
                                 >
                                     {g.name}
