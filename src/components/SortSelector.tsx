@@ -19,7 +19,7 @@ const sortOptions: SortOption[] = [
     { label: 'Ordering by Updated Date (descending order)', value: '-updated' },
     { label: 'Ordering by Created Date (descending order)', value: '-created' },
     { label: 'Ordering by Rating (descending order)', value: '-rating' },
-    { label: 'Ordering by Critic Score (descending order)', value: '-metacritic' },
+    { label: 'Ordering by Critic Core (descending order)', value: '-metacritic' },
     { label: 'Ordering by Name (ascending order)', value: 'name' },
 ]
 
@@ -28,7 +28,7 @@ const SortSelector: FC<Props> = ({ ordering, onOrderingSelect }) => {
 
     const buttonLabel = useMemo(() => {
         const selectedOption = sortOptions.find(option => option.value === ordering)
-        return selectedOption?.label ?? 'No ordering'
+        return selectedOption?.label ?? 'No Ordering'
     }, [ordering])
 
     return (
