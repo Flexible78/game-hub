@@ -1,7 +1,6 @@
-import { Button, Menu, Portal } from '@chakra-ui/react'
-import { useMemo, useState, type FC } from 'react'
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { useMemo, type FC } from 'react'
 import useGenre from '@/services/hooks/useGenre'
+import MenuSelector, { type SelectorItem } from './MenuSelector'
 
 type Props = {
     genreSlug: string | null
@@ -9,41 +8,31 @@ type Props = {
 }
 
 const GenreSelector: FC<Props> = ({ genreSlug, onGenreSelect }) => {
+    // retrieve data from hook
     const { data: genres } = useGenre()
-    const [isOpen, setIsOpen] = useState(false)
 
+    // calculate button label
     const buttonLabel = useMemo(() => {
         const selectedGenre = genres.find(genre => genre.slug === genreSlug)
         return selectedGenre?.name ?? 'Genres'
     }, [genres, genreSlug])
 
+    // transform API data to universal SelectorItem[]
+    const menuItems: SelectorItem[] = useMemo(() => {
+        return genres.map(genre => ({
+            value: genre.slug,
+            label: genre.name
+        }))
+    }, [genres])
+
+    // call component MenuSelector
     return (
-        <Menu.Root open={isOpen} onOpenChange={(details) => setIsOpen(details.open)}>
-            <Menu.Trigger asChild>
-                <Button variant='outline' mb={4}>
-                    {buttonLabel}
-                    {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-                </Button>
-            </Menu.Trigger>
-            <Portal>
-                <Menu.Positioner>
-                    <Menu.Content>
-                        <Menu.Item value='all-genres' onSelect={() => onGenreSelect(null)}>
-                            Genres
-                        </Menu.Item>
-                        {genres.map(genre => (
-                            <Menu.Item
-                                key={genre.id}
-                                value={genre.slug}
-                                onSelect={() => onGenreSelect(genre.slug)}
-                            >
-                                {genre.name}
-                            </Menu.Item>
-                        ))}
-                    </Menu.Content>
-                </Menu.Positioner>
-            </Portal>
-        </Menu.Root>
+        <MenuSelector
+            buttonLabel={buttonLabel}
+            items={menuItems}
+            onSelect={onGenreSelect}
+            defaultItemLabel="Genres"
+        />
     )
 }
 
