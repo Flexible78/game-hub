@@ -1,6 +1,7 @@
 import { useMemo, type FC } from 'react'
 import useGenre from '@/services/hooks/useGenre'
-import MenuSelector, { type SelectorItem } from './MenuSelector'
+import MenuSelector from './MenuSelector'
+import type { MenuItem } from '@/models/MenuItem'
 
 type Props = {
     genreSlug: string | null
@@ -17,11 +18,12 @@ const GenreSelector: FC<Props> = ({ genreSlug, onGenreSelect }) => {
         return selectedGenre?.name ?? 'Genres'
     }, [genres, genreSlug])
 
-    // transform API data to universal SelectorItem[]
-    const menuItems: SelectorItem[] = useMemo(() => {
+    // transform API data to universal MenuItem[]
+    const menuItems: MenuItem[] = useMemo(() => {
         return genres.map(genre => ({
+            id: genre.id,
             value: genre.slug,
-            label: genre.name
+            name: genre.name,
         }))
     }, [genres])
 

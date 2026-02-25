@@ -1,7 +1,8 @@
 import { useMemo, type FC } from 'react'
 import usePlatform from '@/services/hooks/usePlatform'
 import { useColorModeValue } from './ui/color-mode'
-import MenuSelector, { type SelectorItem } from './MenuSelector'
+import MenuSelector from './MenuSelector'
+import type { MenuItem } from '@/models/MenuItem'
 
 type Props = {
     parentPlatformSlug: string | null
@@ -17,10 +18,11 @@ const PlatformSelector: FC<Props> = ({ parentPlatformSlug, onPlatformSelect }) =
         return selectedPlatform?.name ?? 'Platforms'
     }, [platforms, parentPlatformSlug])
 
-    const menuItems: SelectorItem[] = useMemo(() => {
+    const menuItems: MenuItem[] = useMemo(() => {
         return platforms.map(platform => ({
+            id: platform.id,
             value: String(platform.id),
-            label: platform.name,
+            name: platform.name,
         }))
     }, [platforms])
 

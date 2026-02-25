@@ -1,16 +1,12 @@
 import { type FC, useState } from 'react'
 import { Button, Menu, Portal } from '@chakra-ui/react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-
-export type SelectorItem = {
-    value: string | null
-    label: string
-}
+import type { MenuItem } from '@/models/MenuItem'
 
 
 type Props = {
     buttonLabel: string
-    items: SelectorItem[]
+    items: MenuItem[]
     onSelect: (value: string | null) => void
     defaultItemLabel?: string
     textColor?: string
@@ -38,11 +34,11 @@ const MenuSelector: FC<Props> = ({ buttonLabel, items, onSelect, defaultItemLabe
 
                         {items.map((item, index) => (
                             <Menu.Item
-                                key={`${item.value ?? 'null'}-${index}`}
-                                value={item.value ?? `none-${index}`}
+                                key={`${item.id}-${item.value ?? 'null'}-${index}`}
+                                value={item.value ?? `none-${item.id}-${index}`}
                                 onSelect={() => onSelect(item.value)}
                             >
-                                {item.label}
+                                {item.name}
                             </Menu.Item>
                         ))}
                     </Menu.Content>
