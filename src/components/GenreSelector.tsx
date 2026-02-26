@@ -1,4 +1,4 @@
-import { useMemo, type FC } from 'react'
+import { memo, useCallback, useMemo, type FC } from 'react'
 import useGenre from '@/services/hooks/useGenre'
 import MenuSelector from './MenuSelector'
 import type { MenuItem } from '@/models/MenuItem'
@@ -9,16 +9,7 @@ type Props = {
 }
 
 const GenreSelector: FC<Props> = ({ genreSlug, onGenreSelect }) => {
-    // retrieve data from hook
     const { data: genres } = useGenre()
-
-    // calculate button label
-    const buttonLabel = useMemo(() => {
-        const selectedGenre = genres.find(genre => genre.slug === genreSlug)
-        return selectedGenre?.name ?? 'Genres'
-    }, [genres, genreSlug])
-
-    // transform API data to universal MenuItem[]
     const menuItems: MenuItem[] = useMemo(() => {
         return genres.map(genre => ({
             id: genre.id,
@@ -26,16 +17,19 @@ const GenreSelector: FC<Props> = ({ genreSlug, onGenreSelect }) => {
             name: genre.name,
         }))
     }, [genres])
+    const handleItemSelect = useCallback(
+        (item: MenuItem | null) => onGenreSelect(item?.value ?? null),
+        [onGenreSelect],
+    )
 
-    // call component MenuSelector
     return (
         <MenuSelector
-            buttonLabel={buttonLabel}
+            selectedItemValue={genreSlug}
             items={menuItems}
-            onSelect={onGenreSelect}
-            defaultItemLabel="Genres"
+            onItemSelect={handleItemSelect}
+            defaultName='Genres'
         />
     )
 }
 
-export default GenreSelector
+export default memo(GenreSelector)

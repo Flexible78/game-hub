@@ -1,4 +1,4 @@
-import { useMemo, type FC } from 'react'
+import { memo, useCallback, useMemo, type FC } from 'react'
 import { useColorModeValue } from './ui/color-mode'
 import MenuSelector from './MenuSelector'
 import useSortOption from '@/services/hooks/useSortOption'
@@ -13,12 +13,6 @@ const SortSelector: FC<Props> = ({ ordering, onOrderingSelect }) => {
     const filterTextColor = useColorModeValue('#2a3f60', '#b2bfd3')
     const sortOptions = useSortOption()
 
-    const buttonLabel = useMemo(() => {
-        const selectedOption = sortOptions.find(option => option.value === ordering)
-        if (!selectedOption) return 'No Ordering'
-        return selectedOption.value ? `Ordering ${selectedOption.name}` : selectedOption.name
-    }, [ordering, sortOptions])
-
     const menuItems: MenuItem[] = useMemo(() => {
         return sortOptions.map(option => ({
             id: option.id,
@@ -26,15 +20,21 @@ const SortSelector: FC<Props> = ({ ordering, onOrderingSelect }) => {
             name: option.value ? `Ordering ${option.name}` : option.name,
         }))
     }, [sortOptions])
+    const handleItemSelect = useCallback(
+        (item: MenuItem | null) => onOrderingSelect(item?.value ?? null),
+        [onOrderingSelect],
+    )
 
     return (
         <MenuSelector
-            buttonLabel={buttonLabel}
+            selectedItemValue={ordering}
             items={menuItems}
-            onSelect={onOrderingSelect}
+            onItemSelect={handleItemSelect}
+            defaultName='No Ordering'
+            showDefaultItem={false}
             textColor={filterTextColor}
         />
     )
 }
 
-export default SortSelector
+export default memo(SortSelector)

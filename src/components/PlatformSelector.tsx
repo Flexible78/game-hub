@@ -1,4 +1,4 @@
-import { useMemo, type FC } from 'react'
+import { memo, useCallback, useMemo, type FC } from 'react'
 import usePlatform from '@/services/hooks/usePlatform'
 import { useColorModeValue } from './ui/color-mode'
 import MenuSelector from './MenuSelector'
@@ -13,28 +13,37 @@ const PlatformSelector: FC<Props> = ({ parentPlatformSlug, onPlatformSelect }) =
     const { data: platforms } = usePlatform()
     const filterTextColor = useColorModeValue('#2a3f60', '#b2bfd3')
 
-    const buttonLabel = useMemo(() => {
-        const selectedPlatform = platforms.find(platform => String(platform.id) === parentPlatformSlug)
-        return selectedPlatform?.name ?? 'Platforms'
-    }, [platforms, parentPlatformSlug])
-
     const menuItems: MenuItem[] = useMemo(() => {
-        return platforms.map(platform => ({
-            id: platform.id,
-            value: String(platform.id),
-            name: platform.name,
-        }))
+        return platforms
+            .filter((platform) => {
+                const normalizedName = platform.name.trim().toLowerCase()
+                return (
+                    platform.id !== -1 &&
+                    platform.slug !== 'platforms' &&
+                    normalizedName !== 'all platforms' &&
+                    normalizedName !== 'platforms'
+                )
+            })
+            .map(platform => ({
+                id: platform.id,
+                value: String(platform.id),
+                name: platform.name,
+            }))
     }, [platforms])
+    const handleItemSelect = useCallback(
+        (item: MenuItem | null) => onPlatformSelect(item?.value ?? null),
+        [onPlatformSelect],
+    )
 
     return (
         <MenuSelector
-            buttonLabel={buttonLabel}
+            selectedItemValue={parentPlatformSlug}
             items={menuItems}
-            onSelect={onPlatformSelect}
-            defaultItemLabel='Platforms'
+            onItemSelect={handleItemSelect}
+            defaultName='Platforms'
             textColor={filterTextColor}
         />
     )
 }
 
-export default PlatformSelector
+export default memo(PlatformSelector)
