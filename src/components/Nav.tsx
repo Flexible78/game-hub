@@ -2,12 +2,13 @@ import { Box, HStack, Image } from '@chakra-ui/react'
 import logo from "/image.png"
 import React from 'react'
 import { ColorModeButton, useColorModeValue } from './ui/color-mode'
-
+import SearchBar from './SearchBar'
 type Props = {
-  onLogoClick: () => void
+    onLogoClick: () => void
+    onSearch: (searchText: string) => void
 }
 
-const Nav: React.FC<Props> = ({ onLogoClick }) => {
+const Nav: React.FC<Props> = ({ onLogoClick, onSearch }) => {
   const buttonColor = useColorModeValue('#596f90', '#a9bddc')
   const logoFilter = useColorModeValue(
     'drop-shadow(0 2px 8px rgba(65, 91, 128, 0.28))',
@@ -15,7 +16,7 @@ const Nav: React.FC<Props> = ({ onLogoClick }) => {
   )
 
   return (
-    <HStack justifyContent={"space-between"} px={4} py={1}>
+    <HStack justifyContent={"space-between"} px={4} py={1} gap={3}>
             <Box
               as="button"
               p={0}
@@ -30,6 +31,9 @@ const Nav: React.FC<Props> = ({ onLogoClick }) => {
               onClick={onLogoClick}
             >
               <Image src={logo} boxSize={{ base: "7", md: "8" }} filter={logoFilter} />
+            </Box>
+            <Box flex='1' maxW='520px'>
+                <SearchBar onSubmitSearchText={onSearch} />
             </Box>
             <ColorModeButton color={buttonColor} />
     </HStack>

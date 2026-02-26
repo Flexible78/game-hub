@@ -8,7 +8,6 @@ import type { GameQueryParams } from "./models/GameQueryParams"
 import PlatformSelector from "./components/PlatformSelector"
 import GenreSelector from "./components/GenreSelector"
 import SortSelector from "./components/SortSelector"
-import SearchBar from "./components/SearchBar"
 
 const createDefaultGameQuery = (): GameQueryParams => ({
     genreSlug: null,
@@ -68,7 +67,12 @@ function App() {
                 backdropFilter="blur(4px)"
                 h={navHeight}
             >
-                <Nav onLogoClick={resetAllFilters} />
+                <Nav
+                    onLogoClick={resetAllFilters}
+                    onSearch={(searchText: string) =>
+                        setGameQuery(prev => ({ ...prev, searchStr: searchText.trim() || null }))
+                    }
+                />
             </GridItem>
             <GridItem
                 area="aside"
@@ -127,13 +131,7 @@ function App() {
             </GridItem>
             <GridItem area="main" py={4} ps={{ base: 4, md: 0 }} pe={{ base: 4, md: 4 }}>
                 <HStack gap={3} wrap="wrap" mb={1} align="stretch">
-                    <Box flex={{ base: "1 1 100%", lg: "0 1 380px" }} minW={{ base: "100%", lg: "280px" }}>
-                        <SearchBar
-                            onSubmitSearchText={(text: string) =>
-                                setGameQuery(prev => ({ ...prev, searchStr: text.trim() || null }))
-                            }
-                        />
-                    </Box>
+
                     <Box display={{ base: "block", md: "none" }}>
                         <GenreSelector
                             genreSlug={gameQuery.genreSlug}
