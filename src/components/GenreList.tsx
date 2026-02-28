@@ -1,15 +1,20 @@
 import useGenre from "@/services/hooks/useGenre";
 import { Avatar, Button, HStack, List, Spinner, Text } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useColorModeValue } from "./ui/color-mode";
+import useGameQuery from "@/services/hooks/useGameQuery";
 
 type Props = {
-    onGenreSelect: (genre: string | null) => void
-    genre: string | null
+    onGenreSelect?: (genre: string | null) => void
+    genre?: string | null
 }
 
 const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
     const { data: genres, isLoading } = useGenre();
+    const selectedGenre = useGameQuery((state) => state.genreSlug)
+    const setGenreSlug = useGameQuery((state) => state.setGenreSlug)
+    const handleGenreSelect = onGenreSelect ?? setGenreSlug
+    const activeGenre = genre ?? selectedGenre
     const filterTextColor = useColorModeValue("#2a3f60", "#b2bfd3")
     const scrollbarThumb = useColorModeValue("rgba(91, 113, 146, 0.55)", "rgba(73, 93, 121, 0.78)")
     const scrollbarTrack = useColorModeValue("rgba(219, 228, 241, 0.42)", "rgba(18, 29, 44, 0.76)")
@@ -61,7 +66,7 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
                                 flex="1"
                                 minW="0"
                                 whiteSpace="normal"
-                                onClick={() => onGenreSelect(g.slug)}
+                                onClick={() => handleGenreSelect(g.slug)}
                             >
                                 <Text
                                     w="full"
@@ -71,7 +76,7 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
                                     lineHeight="1.2"
                                     textAlign="left"
                                     color={filterTextColor}
-                                    fontWeight={g.slug === genre ? "bold" : "normal"}
+                                    fontWeight={g.slug === activeGenre ? "bold" : "normal"}
                                 >
                                     {g.name}
                                 </Text>
@@ -84,4 +89,4 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
     )
 };
 
-export default GenreList;
+export default memo(GenreList);

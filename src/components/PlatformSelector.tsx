@@ -3,14 +3,19 @@ import usePlatform from '@/services/hooks/usePlatform'
 import { useColorModeValue } from './ui/color-mode'
 import MenuSelector from './MenuSelector'
 import type { MenuItem } from '@/models/MenuItem'
+import useGameQuery from '@/services/hooks/useGameQuery'
 
 type Props = {
-    parentPlatformSlug: string | null
-    onPlatformSelect: (platform: string | null) => void
+    parentPlatformSlug?: string | null
+    onPlatformSelect?: (platform: string | null) => void
 }
 
 const PlatformSelector: FC<Props> = ({ parentPlatformSlug, onPlatformSelect }) => {
     const { data: platforms } = usePlatform()
+    const selectedPlatformSlug = useGameQuery((state) => state.parentPlatformSlug)
+    const setParentPlatformSlug = useGameQuery((state) => state.setParentPlatformSlug)
+    const activePlatformSlug = parentPlatformSlug ?? selectedPlatformSlug
+    const handlePlatformSelect = onPlatformSelect ?? setParentPlatformSlug
     const filterTextColor = useColorModeValue('#2a3f60', '#b2bfd3')
 
     const menuItems: MenuItem[] = useMemo(() => {
@@ -30,14 +35,13 @@ const PlatformSelector: FC<Props> = ({ parentPlatformSlug, onPlatformSelect }) =
                 name: platform.name,
             }))
     }, [platforms])
-    const handleItemSelect = useCallback(
-        (item: MenuItem | null) => onPlatformSelect(item?.value ?? null),
-        [onPlatformSelect],
-    )
+    const handleItemSelect = useCallback((item: MenuItem | null) => {
+        handlePlatformSelect(item?.value ?? null)
+    }, [handlePlatformSelect])
 
     return (
         <MenuSelector
-            selectedItemValue={parentPlatformSlug}
+            selectedItemValue={activePlatformSlug}
             items={menuItems}
             onItemSelect={handleItemSelect}
             defaultName='Platforms'
