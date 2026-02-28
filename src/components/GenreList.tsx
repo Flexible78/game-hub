@@ -4,17 +4,10 @@ import { FC, memo } from "react";
 import { useColorModeValue } from "./ui/color-mode";
 import useGameQuery from "@/services/hooks/useGameQuery";
 
-type Props = {
-    onGenreSelect?: (genre: string | null) => void
-    genre?: string | null
-}
-
-const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
+const GenreList: FC = () => {
     const { data: genres, isLoading } = useGenre();
     const selectedGenre = useGameQuery((state) => state.genreSlug)
     const setGenreSlug = useGameQuery((state) => state.setGenreSlug)
-    const handleGenreSelect = onGenreSelect ?? setGenreSlug
-    const activeGenre = genre ?? selectedGenre
     const filterTextColor = useColorModeValue("#2a3f60", "#b2bfd3")
     const scrollbarThumb = useColorModeValue("rgba(91, 113, 146, 0.55)", "rgba(73, 93, 121, 0.78)")
     const scrollbarTrack = useColorModeValue("rgba(219, 228, 241, 0.42)", "rgba(18, 29, 44, 0.76)")
@@ -66,7 +59,7 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
                                 flex="1"
                                 minW="0"
                                 whiteSpace="normal"
-                                onClick={() => handleGenreSelect(g.slug)}
+                                onClick={() => setGenreSlug(g.slug)}
                             >
                                 <Text
                                     w="full"
@@ -76,7 +69,7 @@ const GenreList: FC<Props> = ({ onGenreSelect, genre }) => {
                                     lineHeight="1.2"
                                     textAlign="left"
                                     color={filterTextColor}
-                                    fontWeight={g.slug === activeGenre ? "bold" : "normal"}
+                                    fontWeight={g.slug === selectedGenre ? "bold" : "normal"}
                                 >
                                     {g.name}
                                 </Text>

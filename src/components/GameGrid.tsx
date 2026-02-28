@@ -1,14 +1,9 @@
 import { Center, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
-import type { FC } from "react"
 import useGame from '@/services/hooks/useGame'
 import GameCard from './GameCard'
 import { useColorModeValue } from './ui/color-mode'
 
-type Props = {
-    gameQuery?: unknown
-}
-
-const GameGrid: FC<Props> = () => {
+const GameGrid = () => {
     const { data: games, isLoading, error } = useGame()
     const scrollbarThumb = useColorModeValue("rgba(91, 113, 146, 0.55)", "rgba(73, 93, 121, 0.78)")
     const scrollbarTrack = useColorModeValue("rgba(219, 228, 241, 0.42)", "rgba(18, 29, 44, 0.76)")
