@@ -1,20 +1,23 @@
-import { Game } from "@/models/fetch-types";
-import useData from "./useData";
-import { GameQueryParams } from "@/models/GameQueryParams";
+import { Game } from "@/models/fetch-types"
+import useData from "./useData"
+import useGameQuery from "./useGameQuery"
 
-export default function useGame(
-    gameQuery: GameQueryParams
-): { data: Game[]; isLoading: boolean; error: string } {
+export default function useGame(): { data: Game[]; isLoading: boolean; error: string } {
+    const genreSlug = useGameQuery((state) => state.genreSlug)
+    const parentPlatformSlug = useGameQuery((state) => state.parentPlatformSlug)
+    const searchStr = useGameQuery((state) => state.searchStr)
+    const orderings = useGameQuery((state) => state.orderings)
+
     return useData<Game>(
         "games",
         {
             params: {
-                genres: gameQuery.genreSlug ?? undefined,
-                parent_platforms: gameQuery.parentPlatformSlug ?? undefined,
-                search: gameQuery.searchStr ?? undefined,
-                ordering: gameQuery.orderings ?? undefined
-            }
+                genres: genreSlug ?? undefined,
+                parent_platforms: parentPlatformSlug ?? undefined,
+                search: searchStr ?? undefined,
+                ordering: orderings ?? undefined,
+            },
         },
-        [gameQuery.genreSlug, gameQuery.parentPlatformSlug, gameQuery.searchStr, gameQuery.orderings]
-    );
+        [genreSlug, parentPlatformSlug, searchStr, orderings],
+    )
 }

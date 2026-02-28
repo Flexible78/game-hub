@@ -1,15 +1,15 @@
 import { Center, SimpleGrid, Spinner, Text } from '@chakra-ui/react'
+import type { FC } from "react"
 import useGame from '@/services/hooks/useGame'
-import type { GameQueryParams } from '@/models/GameQueryParams'
 import GameCard from './GameCard'
 import { useColorModeValue } from './ui/color-mode'
 
 type Props = {
-    gameQuery: GameQueryParams
+    gameQuery?: unknown
 }
 
-const GameGrid = ({ gameQuery }: Props) => {
-    const { data: games, isLoading, error } = useGame(gameQuery)
+const GameGrid: FC<Props> = () => {
+    const { data: games, isLoading, error } = useGame()
     const scrollbarThumb = useColorModeValue("rgba(91, 113, 146, 0.55)", "rgba(73, 93, 121, 0.78)")
     const scrollbarTrack = useColorModeValue("rgba(219, 228, 241, 0.42)", "rgba(18, 29, 44, 0.76)")
 
@@ -26,6 +26,16 @@ const GameGrid = ({ gameQuery }: Props) => {
             <Text color='red.500' fontSize='2rem' fontWeight='bold'>
                 {error}
             </Text>
+        )
+    }
+
+    if (games.length === 0) {
+        return (
+            <Center minH='30vh'>
+                <Text color='gray.400' fontSize={{ base: '1rem', md: '1.1rem' }}>
+                    No games found for the selected filters. Try clearing search or changing platform/genre.
+                </Text>
+            </Center>
         )
     }
 
