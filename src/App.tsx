@@ -9,20 +9,20 @@ import useGameQuery from "@/services/hooks/useGameQuery"
 
 function App() {
     const navHeight = "52px"
-    const navBackground = "linear-gradient(90deg, #eef3fb 0%, #e8effa 60%, #ecebff 100%)"
-    const navTexture = "repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0px, rgba(255, 255, 255, 0.1) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 5px)"
-    const navVelvetShade = "linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 58%, rgba(0, 0, 0, 0.08) 100%)"
-    const navBorder = "#d4dfef"
+    const navBackground = "linear-gradient(90deg, #1a2330 0%, #1a2230 60%, #211b31 100%)"
+    const navTexture = "repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 5px)"
+    const navVelvetShade = "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, 0.25) 100%)"
+    const navBorder = "#334357"
 
-    const asideBackground = "linear-gradient(180deg, #f7f9fe 0%, #edf2fb 100%)"
-    const asideBorder = "#d8e2f2"
-    const asidePanelBg = "rgba(255, 255, 255, 0.55)"
-    const asidePanelBorder = "rgba(216, 226, 242, 0.7)"
-    const asideTitleColor = "#4a6487"
-    const asideTitleHoverColor = "#2d4e78"
-    const asideTitleBg = "rgba(223, 232, 246, 0.95)"
-    const asideTitleHoverBg = "rgba(212, 224, 243, 1)"
-    const asideTitleBorder = "rgba(181, 198, 222, 0.85)"
+    const asideBackground = "linear-gradient(180deg, #111a27 0%, #0d1522 100%)"
+    const asideBorder = "#2a3a4f"
+    const asidePanelBg = "rgba(24, 33, 49, 0.35)"
+    const asidePanelBorder = "rgba(42, 58, 79, 0.7)"
+    const asideTitleColor = "#dbe8ff"
+    const asideTitleHoverColor = "#ffffff"
+    const asideTitleBg = "rgba(9, 17, 30, 0.72)"
+    const asideTitleHoverBg = "rgba(13, 24, 42, 0.95)"
+    const asideTitleBorder = "rgba(50, 68, 92, 0.9)"
 
     return (
         <Grid
