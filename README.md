@@ -1,4 +1,5 @@
-PlatformSelector
-Chakra component Menu
-List.Item
-Button with name of either "Platforms" or selected platform Menu items are in accordance to quering all parent platforms from RAWG
+Applying Zustand state management
+Remove all properties passed from parent to child components (except using reusable component MenuSelector)
+App.tsx shouldn't contain any hooks
+Apply custom hook useGameQuery created by Zustand
+Remove type GameQueryParams
