@@ -1,23 +1,22 @@
-import { Game } from "@/models/fetch-types"
+import type { Game } from "@/models/fetch-types"
+import useGameQuery from "@/services/hooks/useGameQuery"
 import useData from "./useData"
-import useGameQuery from "./useGameQuery"
 
-export default function useGame(): { data: Game[]; isLoading: boolean; error: string } {
-    const genreSlug = useGameQuery((state) => state.genreSlug)
-    const parentPlatformSlug = useGameQuery((state) => state.parentPlatformSlug)
-    const searchStr = useGameQuery((state) => state.searchStr)
-    const orderings = useGameQuery((state) => state.orderings)
+type UseGameResult = {
+    data: Game[]
+    isLoading: boolean
+    error: string
+}
 
-    return useData<Game>(
-        "games",
-        {
-            params: {
-                genres: genreSlug ?? undefined,
-                parent_platforms: parentPlatformSlug ?? undefined,
-                search: searchStr ?? undefined,
-                ordering: orderings ?? undefined,
-            },
+export default function useGame(): UseGameResult {
+    const { genreSlug, parentPlatformSlug, orderings, searchStr } = useGameQuery()
+
+    return useData<Game>("games", {
+        params: {
+            genres: genreSlug ?? undefined,
+            parent_platforms: parentPlatformSlug ?? undefined,
+            ordering: orderings ?? undefined,
+            search: searchStr ?? undefined,
         },
-        [genreSlug, parentPlatformSlug, searchStr, orderings],
-    )
+    })
 }

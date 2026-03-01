@@ -1,48 +1,15 @@
-import { useEffect, useState } from 'react'
-import type { FetchResponse } from '@/models/fetch-types'
-import apiClient from '@/services/app-client'
-import { AxiosError, type AxiosRequestConfig } from 'axios'
+import apiClient from "../app-client";
+import { type FetchResponse } from "@/models/fetch-types";
+import { AxiosError, AxiosRequestConfig } from "axios";
+import { useQuery } from "@tanstack/react-query";
 
-type UseDataResult<T> = {
-    data: T[]
-    isLoading: boolean
-    error: string
-}
+export default function useData<T>(endpoint: string, config?: AxiosRequestConfig): {data: T[], isLoading: boolean, error: string} {
+    const queryKey: any[] = [endpoint]
+    config && queryKey.push(config)
+    const queryRes = useQuery<T[], AxiosError>({
+        queryKey,
+        queryFn: () => apiClient.get<FetchResponse<T>>(endpoint, config).then(res => res.data.results)
+    })
 
-export default function useData<T>(
-    endpoint: string,
-    config?: AxiosRequestConfig,
-    deps: readonly unknown[] = [],
-): UseDataResult<T> {
-    const [data, setData] = useState<T[]>([])
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState('')
-
-    useEffect(() => {
-        let isCancelled = false
-        setIsLoading(true)
-        setError('')
-
-        apiClient
-            .get<FetchResponse<T>>(endpoint, config)
-            .then(res => {
-                if (isCancelled) return
-                setData(res.data.results)
-            })
-            .catch((e: unknown) => {
-                if (isCancelled) return
-                setData([])
-                setError(e instanceof AxiosError ? e.message : 'Failed to load data')
-            })
-            .finally(() => {
-                if (isCancelled) return
-                setIsLoading(false)
-            })
-
-        return () => {
-            isCancelled = true
-        }
-    }, [endpoint, ...deps])
-
-    return { data, isLoading, error }
+    return {data:queryRes.data || [], isLoading: queryRes.isLoading, error: queryRes.error?.message || ""};
 }
